@@ -1,0 +1,118 @@
+{
+    "version": "0",
+    "id": "a450cee6-5c5d-69e0-1079-be99ed14e6ab",
+    "detail-type": "CodeBuild Build State Change",
+    "source": "aws.codebuild",
+    "account": "123456789012",
+    "time": "2021-03-18T09:18:51Z",
+    "region": "eu-west-1",
+    "resources": [
+        "arn:aws:codebuild:eu-west-1:123456789012:build/codebuild-evaluation:c9d89e33-107d-4213-aa56-9e411d88ec3c"
+    ],
+    "detail": {
+        "build-status": "RUNNING",
+        "project-name": "codebuild-evaluation",
+        "build-id": "arn:aws:codebuild:eu-west-1:123456789012:build/codebuild-evaluation:c9d89e33-107d-4213-aa56-9e411d88ec3c",
+        "additional-information": {
+            "cache": {
+                "type": "NO_CACHE"
+            },
+            "build-number": 6,
+            "timeout-in-minutes": 60,
+            "build-complete": true,
+            "initiator": "codebuild-notifications-gi-GitHubWebhookLambdaRole-19XPO2BZFWW/codebuild-notifications-github-GitHubWebhookLambda-P2AY4O2HDC",
+            "build-start-time": "Mar 18, 2021 9:18:19 AM",
+            "source": {
+                "report-build-status": false,
+                "buildspec": "prcheck-buildspec.yaml",
+                "location": "https://github.com/UserName/test-codebuild.git",
+                "git-clone-depth": 1,
+                "type": "GITHUB",
+                "git-submodules-config": {
+                    "fetch-submodules": false
+                }
+            },
+            "source-version": "pr/1",
+            "artifact": {
+                "location": ""
+            },
+            "environment": {
+                "image": "aws/codebuild/standard:5.0",
+                "privileged-mode": true,
+                "image-pull-credentials-type": "CODEBUILD",
+                "compute-type": "BUILD_GENERAL1_SMALL",
+                "type": "LINUX_CONTAINER",
+                "environment-variables": [
+                    {
+                        "name": "GIT_COMMIT",
+                        "type": "PLAINTEXT",
+                        "value": "5a892213349f7d78497f6db3479711936908147a"
+                    },
+                    {
+                        "name": "GIT_PR",
+                        "type": "PLAINTEXT",
+                        "value": "1"
+                    }
+                ]
+            },
+            "logs": {
+                "group-name": "codebuild-test",
+                "stream-name": "c9d89e33-107d-4213-aa56-9e411d88ec3d",
+                "deep-link": "https://console.aws.amazon.com/cloudwatch/home?region=eu-west-1#logEvent:group=codebuild-test;stream=c9d89e33-107d-4213-aa56-9e411d88ec3d"
+            },
+            "phases": [
+                {
+                    "phase-context": [],
+                    "start-time": "Mar 18, 2021 9:18:19 AM",
+                    "end-time": "Mar 18, 2021 9:18:19 AM",
+                    "duration-in-seconds": 0,
+                    "phase-type": "SUBMITTED",
+                    "phase-status": "SUCCEEDED"
+                },
+                {
+                    "phase-context": [],
+                    "start-time": "Mar 18, 2021 9:18:19 AM",
+                    "end-time": "Mar 18, 2021 9:18:20 AM",
+                    "duration-in-seconds": 1,
+                    "phase-type": "QUEUED",
+                    "phase-status": "SUCCEEDED"
+                },
+                {
+                    "phase-context": [
+                        ": "
+                    ],
+                    "start-time": "Mar 18, 2021 9:18:20 AM",
+                    "end-time": "Mar 18, 2021 9:18:44 AM",
+                    "duration-in-seconds": 24,
+                    "phase-type": "PROVISIONING",
+                    "phase-status": "SUCCEEDED"
+                },
+                {
+                    "start-time": "Mar 18, 2021 9:18:44 AM",
+                    "end-time": "Mar 18, 2021 9:18:46 AM",
+                    "duration-in-seconds": 1,
+                    "phase-type": "DOWNLOAD_SOURCE",
+                    "phase-status": "FAILED"
+                },
+                {
+                    "phase-context": [
+                        ": "
+                    ],
+                    "start-time": "Mar 18, 2021 9:18:46 AM",
+                    "end-time": "Mar 18, 2021 9:18:50 AM",
+                    "duration-in-seconds": 4,
+                    "phase-type": "FINALIZING",
+                    "phase-status": "SUCCEEDED"
+                },
+                {
+                    "start-time": "Mar 18, 2021 9:18:50 AM",
+                    "phase-type": "COMPLETED"
+                }
+            ],
+            "queued-timeout-in-minutes": 480
+        },
+        "current-phase": "COMPLETED",
+        "current-phase-context": "[: ]",
+        "version": "1"
+    }
+}

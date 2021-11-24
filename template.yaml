@@ -1,0 +1,99 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Transform: AWS::Serverless-2016-10-31
+
+Description: "SAM template to deploy Codebuild notification resources"
+
+Parameters:
+
+  GitHubAccessToken:
+    Type: String
+    Description: "GitHub access token"
+
+Globals:
+
+  Function:
+    Runtime: python3.8
+    Timeout: 60
+    Environment:
+      Variables:
+        REGION: !Sub "${AWS::Region}"
+
+Resources:
+
+  GitHubApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: "github-webhook"
+      StageName: latest
+
+  GitHubWebhookLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: handlers.webhook_handler
+      Policies:
+        - AWSLambdaExecute
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - codebuild:BatchGetProjects
+                - codebuild:StartBuild
+              Resource: "*"
+            - Effect: Allow
+              Action:
+                - secretsmanager:GetSecretValue
+              Resource: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:codebuild-access-token*"
+      Events:
+        ApiEventGet:
+          Type: Api
+          Properties:
+            RestApiId: !Ref GitHubApiGateway
+            Path: /github-webhook
+            Method: POST
+
+  CodebuildEventHandlerLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: handlers.codebuild_event_handler
+      Policies:
+        - AWSLambdaExecute
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - secretsmanager:GetSecretValue
+              Resource: !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:codebuild-access-token*"
+      Events:
+        CodeBuildEvent:
+          Type: CloudWatchEvent
+          Properties:
+            Pattern: !Sub |
+              {
+                "source": ["aws.codebuild"],
+                "detail-type": [
+                  "CodeBuild Build State Change"
+                ],
+                "detail": {
+                  "build-status": [
+                    "FAILED",
+                    "STOPPED",
+                    "SUCCEEDED"
+                  ]
+                }
+              }
+
+  GitHubUserAccessToken:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description: "Access token for a GitHub user that has access to repositories"
+      Name: "codebuild-access-token"
+      SecretString: !Ref GitHubAccessToken
+
+Outputs:
+
+  WebhookEndpoint:
+    Description: "URL of GitHub webhook"
+    Value: !Sub "https://${GitHubApiGateway}.execute-api.${AWS::Region}.amazonaws.com/latest/github-webhook"
